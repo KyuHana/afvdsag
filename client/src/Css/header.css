@@ -1,0 +1,149 @@
+.wholeBody {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.body {
+  width: 60%;
+  height: 100vh;
+  padding: 30px;
+}
+
+.header {
+  display: flex;
+  padding: 40px;
+  padding-left: 0;
+}
+
+.searchWords {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.searchBox {
+  display: flex;
+}
+
+.naverKeywordBoxHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  background-color: #2db400;
+  border-radius: 10px;
+  width: 100px;
+  padding: 10px;
+}
+
+.naverTrendContentBox {
+}
+
+.showAniversalBox {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  padding-bottom: 20px;
+}
+
+.showAniversalBox__gender {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  padding-top: 6px;
+  padding-bottom: 20px;
+}
+
+.showAniversalBox__gender_each {
+  width: 50px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.showAniversalBox__age {
+  display: flex;
+  flex-direction: row;
+  
+}
+
+
+
+.showAniversalBox__age > ul {
+  list-style: none;
+  display: flex;
+}
+
+.showAniversalBox__age > ul > li {
+  margin-left: 4px;
+}
+
+.showAniversalBox__age > ul > li > input {
+  width: 70px;
+  height: 30px;
+  background-color: white;
+  border: none;
+}
+
+.showAniversalBox__inBox {
+  list-style: none;
+  width: 140px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0px;
+  padding-bottom: 10px;
+}
+
+.showAniversalBox__inBox > div:nth-child(1) {
+  width: 100px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+}
+
+.switchAniversal {
+  width: 40px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.showAniversalBox__inBox > div > span {
+  font-size: 16px;
+  color: white;
+}
+
+.naverKeywordBoxHeader__title {
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+.naverKeywordBoxConnecKeywordBox {
+  padding-top: 20px;
+}
+
+.naverKeywordBoxConnecKeyword__each {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.naverKeywordBoxConnecKeyword__each > li {
+  list-style: none;
+  padding-right: 20px;
+  font-size: 20px;
+}
+
+.naverKeywordBoxConnecKeywordBox__inDiv {
+  margin-top: 10px;
+  margin-bottom: 30px;
+}

@@ -1,0 +1,36 @@
+.searchHome {
+  width: 100%;
+  display: flex;
+}
+
+.searchIcon {
+  left: -100;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.searchBox {
+  padding-top: 10px;
+}
+
+.searchForm {
+  width: 300px;
+  height: 40px;
+  border: 0px solid black;
+  background-color: rgba(0, 0, 0, 0.04);
+  color: "black";
+}
+
+.searchForm::placeholder {
+  color: black;
+}
+
+input.searchForm:focus {
+  outline: none;
+}

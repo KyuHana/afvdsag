@@ -26,6 +26,10 @@ function SearchContent({color, title, props}) {
     borderNone: 'none'
   }
 
+  const clickContent = {
+    clickName: props.location.state.detail,
+  }
+  
 
   if(gender == 'm') {
       defaultset.borderHere = '1px solid rgba(0,0,0,0.5)';
@@ -34,6 +38,24 @@ function SearchContent({color, title, props}) {
     defaultset.borderHere = 'none'
     defaultset.borderNone = '1px solid rgba(0,0,0,0.5)';
   }
+
+  React.useEffect(() => {
+    let key = {
+      'cat': 'meow',
+      'dog': 'bark'
+    }
+    let as = '"'
+    console.log(as)
+    axios.post('api/clickcnt', clickContent)
+    .then((response) => {
+      let re = response.data[5].split("=")
+      let rr = [re[1].trim()]
+      let rrr = rr[0].replace(/'/g, as)
+      let tttt = JSON.parse(rrr)
+      console.log(tttt)
+      console.log(tttt["relKeyword"])
+    })
+  }, [])
 
   React.useEffect(() => {
     searchingKeyword()
@@ -51,7 +73,7 @@ function SearchContent({color, title, props}) {
         response = response.data.results[0].data
         setKeywordRatio(keywordRatio.splice(0,12));
         setKeywordRatio([...keywordRatio, ...response])
-        console.log(keywordRatio)
+        console.log(response)
         setBool(true)
       }
     })
@@ -77,10 +99,12 @@ function SearchContent({color, title, props}) {
       setGender('m')
       axios.post('api/search', content)
       .then((response) => {
+        console.log(response)
         if(response == null) {
           setBool(false)
           //null일때는 안보이게
         } else {
+          console.log(response)
           response = response.data.results[0].data
           setKeywordRatio(keywordRatio.splice(0,12));
           setKeywordRatio([...keywordRatio, ...response])
@@ -135,7 +159,6 @@ function SearchContent({color, title, props}) {
         response = response.data.results[0].data
         setKeywordRatio(keywordRatio.splice(0,12));
         setKeywordRatio([...keywordRatio, ...response])
-        console.log(keywordRatio)
         setBool(true)
       }
     })
@@ -164,6 +187,8 @@ function SearchContent({color, title, props}) {
     setClicked(false)
     
   }
+
+  
 
     return (
       <div className="searchContent">

@@ -2,19 +2,8 @@ const express = require('express');
 const app = express();
 const port = 5000;
 let PythonShell = require('python-shell');
-let options = {
-    mode: 'text',
-    pythonPath: '',
-    pythonOption: ['-u'],
-    scriptPath: '',
-    args: ['value1', 'value2', 'value3']
-};
 
-PythonShell.PythonShell.run('test.py', options, function(err, results) {
-    if(err) throw err;
-
-    console.log('results: %j', results);
-})
+//searchRelated/ad_management_sample.py
 
 
 app.use(express.urlencoded({extended: true})); 
@@ -22,16 +11,25 @@ app.use(express.json());
 
 app.get('/', (req, res) => res.send("Hello World"));
 
-app.get('/api/hello', (req, res) => {
-  res.send('안녕하세요')
-});
+app.post('/api/clickcnt', (req, res) => {
+    let options = {
+        mode: 'text',
+        args: [`${req.body.clickName}`]
+    };
+    let clickedres;
+
+    PythonShell.PythonShell.run('searchRelated/ad_management_sample.py', options, function(err, results) {
+        if(err) throw err
+        clickedres = results;
+        
+        res.send(clickedres);
+    }) 
+})
 
 app.post('/api/search', (req, res) => {
-    
     let age = String(req.body.age);
-    
-    
-  let request = require('request');
+
+    let request = require('request');
   let client_id = '7Fu4qe3isictj2YJ0gCU';
   let client_secret = 'ztee3uWChW';
   let api_url = 'https://openapi.naver.com/v1/datalab/search';
@@ -51,7 +49,9 @@ app.post('/api/search', (req, res) => {
       "ages": [`${req.body.age}`],
       "gender": `${req.body.gender}`
   };
+
   
+
   request.post({
           url: api_url,
           body: JSON.stringify(request_body),
@@ -62,11 +62,9 @@ app.post('/api/search', (req, res) => {
           }
       },
       function (error, response, body) {
-          res.send(body);
+        
+        res.send(body);
       });
-  
-  
-
 })
 
 

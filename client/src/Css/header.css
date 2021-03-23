@@ -13,8 +13,9 @@
 
 .header {
   display: flex;
-  padding: 40px;
   padding-left: 0;
+  padding-bottom: 20px;
+  padding-top: 20px;
 }
 
 .searchWords {
@@ -43,7 +44,7 @@
 .showAniversalBox {
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   padding-bottom: 20px;
 }
 
@@ -69,10 +70,7 @@
 .showAniversalBox__age {
   display: flex;
   flex-direction: row;
-  
 }
-
-
 
 .showAniversalBox__age > ul {
   list-style: none;

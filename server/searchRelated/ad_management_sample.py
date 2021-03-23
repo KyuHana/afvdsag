@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
+import sys
 import time
 import random
 import requests
 
 import signaturehelper
+
+
+print('asdf')
 
 
 def get_header(method, uri, API_KEY, SECRET_KEY, CUSTOMER_ID):
@@ -24,11 +28,14 @@ CUSTOMER_ID = "2197355"
 
 # 1. GET adgroup Usage Sample
 
+keyword = sys.argv[1]
+print(keyword)
+print('asldkhfkajsdhfkjladfhs\n')
 uri = '/keywordstool'
 method = 'GET'
 r = requests.get(
     BASE_URL + uri +
-    '?hintKeywords={}&showDetail=1'.format(input('연관키워드를 조회할 키워드를 입력하세요\n')),
+    f'?hintKeywords={keyword}&showDetail=1',
     headers=get_header(method, uri, API_KEY, SECRET_KEY, CUSTOMER_ID))
 
 print("response status_code = {}".format(r.status_code))

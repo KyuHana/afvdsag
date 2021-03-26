@@ -7,9 +7,6 @@ import requests
 import signaturehelper
 
 
-print('asdf')
-
-
 def get_header(method, uri, API_KEY, SECRET_KEY, CUSTOMER_ID):
     timestamp = int(time.time() * 1000)
     timestamp = str(timestamp)
@@ -29,8 +26,6 @@ CUSTOMER_ID = "2197355"
 # 1. GET adgroup Usage Sample
 
 keyword = sys.argv[1]
-print(keyword)
-print('asldkhfkajsdhfkjladfhs\n')
 uri = '/keywordstool'
 method = 'GET'
 r = requests.get(
@@ -39,4 +34,4 @@ r = requests.get(
     headers=get_header(method, uri, API_KEY, SECRET_KEY, CUSTOMER_ID))
 
 print("response status_code = {}".format(r.status_code))
-print("response body = {}".format(r.json()['keywordList'][0]))
+print("response body = {}".format(r.json()['keywordList']))

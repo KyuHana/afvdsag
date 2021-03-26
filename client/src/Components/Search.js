@@ -10,12 +10,14 @@ function Search(props) {
   const [search, setSearch] = useState("")
   
   const changeSearch = (e) => {
-    setSearch(e.target.value)
-    console.log(search)
+    let arrr = `${e.target.value}`.trim()
+    arrr = arrr.replace(/(\s*)/g, "")
+    setSearch(arrr)
   }
 
   const onSubmit = (e) => {
     e.preventDefault()
+
     props.history.push({
       pathname: '/search',
       state: {

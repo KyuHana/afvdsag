@@ -9,12 +9,11 @@ let PythonShell = require('python-shell');
 app.use(express.urlencoded({extended: true})); 
 app.use(express.json());   
 
-app.get('/', (req, res) => res.send("Hello World"));
-
 app.post('/api/clickcnt', (req, res) => {
+    let keywordTrim = `${req.body.clickName}`.trim()
     let options = {
         mode: 'text',
-        args: [`${req.body.clickName}`]
+        args: [`${keywordTrim}`, '0']
     };
     let clickedres;
 

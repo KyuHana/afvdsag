@@ -1,6 +1,7 @@
 import React from 'react';
 import Main from './Components/Main';
 import Header from './Components/Header';
+import SearchContent from './Components/SearchContent';
 import {
   BrowserRouter as Router,
   Switch,
@@ -13,6 +14,7 @@ function App() {
       <Switch>
         <Route exact path='/' component={Main} />
         <Route exact path='/search' component={Header} />
+        <Route exact path='/searchContent' component={SearchContent} />
       </Switch>
     </Router>
     

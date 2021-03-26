@@ -7,11 +7,6 @@ import Title from './Title';
 import '../Css/main.css';
 
 function Main(props) {
-  React.useEffect(() => {
-    axios.get('/api/hello')
-      .then(response => console.log(response.data))
-  }, [])
-  
   return (
     <div className="wholeBody">
       <div className="body"> 

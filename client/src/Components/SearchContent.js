@@ -4,7 +4,8 @@ import '../Css/header.css'
 import { Bar } from 'react-chartjs-2'
 import {withRouter} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronUp, faChevronDown, faMale, faFemale } from '@fortawesome/free-solid-svg-icons'
+import { faChevronUp, faChevronDown, faMale, faFemale, faAngleDown } from '@fortawesome/free-solid-svg-icons'
+import RelKeywordPage from '../Components/RelKeywordPage'
 
 function SearchContent({color, title, props}) {
   const [keywordRatio, setKeywordRatio] = useState([])
@@ -14,8 +15,17 @@ function SearchContent({color, title, props}) {
   const [genderBool, setGenderBool] = useState(null)
   const [age, setAge] = useState("2")
   const [ageBool, setAgeBool] = useState(false)
+  const [mobileClic, setMobileClic] = useState("")
+  const [pcClick, setPcClick] = useState("")
+  const [compIdx, setCompIdx] = useState("")
+  const [relKeyword, setRelKeyword] = useState("")
+  const [moreRelKeyword, setMoreRelKeyword] = useState(false)
+  const [showbarBox, setShowbarBox] = useState(true)
+
+  let keywordGrapetrim = props.location.state.detail
+  keywordGrapetrim = keywordGrapetrim.replace(/(\s*)/g, "")
   const content = {
-    searchContent: props.location.state.detail,
+    searchContent: keywordGrapetrim,
     aniversal: aniversal,
     gender: gender,
     age: age
@@ -24,12 +34,10 @@ function SearchContent({color, title, props}) {
   const defaultset = {
     borderHere: '1px solid rgba(0,0,0,0.5)',
     borderNone: 'none'
-  }
-
+  } 
   const clickContent = {
     clickName: props.location.state.detail,
   }
-  
 
   if(gender == 'm') {
       defaultset.borderHere = '1px solid rgba(0,0,0,0.5)';
@@ -40,22 +48,26 @@ function SearchContent({color, title, props}) {
   }
 
   React.useEffect(() => {
-    let key = {
-      'cat': 'meow',
-      'dog': 'bark'
-    }
     let as = '"'
-    console.log(as)
     axios.post('api/clickcnt', clickContent)
     .then((response) => {
-      let re = response.data[5].split("=")
-      let rr = [re[1].trim()]
-      let rrr = rr[0].replace(/'/g, as)
+      let re = response.data[1].split("=")
+      //let rr = [re[1].trim()]
+      //let rrr = rr[0].replace(/'/g, as)
+      let rr = re[1].trim()
+      let rrr = rr.replace(/'/g, as)
+      let rrrr = rrr[1]
       let tttt = JSON.parse(rrr)
-      console.log(tttt)
-      console.log(tttt["relKeyword"])
+      let t2 = tttt
+      let t1 = tttt[0]
+      setMobileClic(t1["monthlyMobileQcCnt"])
+      setPcClick(t1["monthlyPcQcCnt"])
+      setCompIdx(t1["compIdx"])
+      setRelKeyword(t2)
     })
-  }, [])
+    setMoreRelKeyword(false)
+    
+  }, [props.location.state.detail])
 
   React.useEffect(() => {
     searchingKeyword()
@@ -63,32 +75,36 @@ function SearchContent({color, title, props}) {
   }, [props.location.state.detail])
 
   React.useEffect(() => {
-    if(clicked === true) {
-      axios.post('api/search', content)
+    if(clicked === true) { //aniversal이 올라갈때
+      return axios.post('api/search', content)
     .then((response) => {
-      if(response == null) {
-        setBool(false)
-        //null일때는 안보이게
-      } else {
-        response = response.data.results[0].data
-        setKeywordRatio(keywordRatio.splice(0,12));
-        setKeywordRatio([...keywordRatio, ...response])
-        console.log(response)
+      response = response.data.results[0].data
+      setKeywordRatio(keywordRatio.splice(0,12));
+      if(response.length != 12) {
+        setKeywordRatio([ {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}])  
         setBool(true)
+        setShowbarBox(false)
+      }
+      else {
+        setKeywordRatio([...keywordRatio, ...response])
+        setBool(true)
+        setShowbarBox(true)
       }
     })
-    } else if(clicked === false) {
+    } else if(clicked === false) { //aniversal이 내려갈때
       axios.post('api/search', content)
     .then((response) => {
-      if(response == null) {
-        setBool(false)
-        //null일때는 안보이게
-      } else {
-        response = response.data.results[0].data
-        setKeywordRatio(keywordRatio.splice(0,12));
-        setKeywordRatio([...keywordRatio, ...response])
-        console.log(keywordRatio)
+      response = response.data.results[0].data
+      setKeywordRatio(keywordRatio.splice(0,12));
+      if(response.length != 12) {
+        setKeywordRatio([ {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}])  
         setBool(true)
+        setShowbarBox(false)
+      }
+      else {
+        setKeywordRatio([...keywordRatio, ...response])
+        setBool(true)
+        setShowbarBox(true)
       }
     })
     }
@@ -99,17 +115,22 @@ function SearchContent({color, title, props}) {
       setGender('m')
       axios.post('api/search', content)
       .then((response) => {
-        console.log(response)
         if(response == null) {
           setBool(false)
           //null일때는 안보이게
         } else {
-          console.log(response)
           response = response.data.results[0].data
           setKeywordRatio(keywordRatio.splice(0,12));
-          setKeywordRatio([...keywordRatio, ...response])
-          console.log(keywordRatio)
-          setBool(true)
+          if(response.length != 12) {
+            setKeywordRatio([ {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}])  
+            setBool(true)
+            setShowbarBox(false)
+          }
+          else {
+            setKeywordRatio([...keywordRatio, ...response])
+            setBool(true)
+            setShowbarBox(true)
+          }
         }
       })
     }
@@ -123,9 +144,16 @@ function SearchContent({color, title, props}) {
         } else {
           response = response.data.results[0].data
           setKeywordRatio(keywordRatio.splice(0,12));
-          setKeywordRatio([...keywordRatio, ...response])
-          console.log(keywordRatio)
-          setBool(true)
+          if(response.length != 12) {
+            setKeywordRatio([ {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}])  
+            setBool(true)
+            setShowbarBox(false)
+          }
+          else {
+            setKeywordRatio([...keywordRatio, ...response])
+            setBool(true)
+            setShowbarBox(true)
+          }
         }
       })
     }
@@ -141,9 +169,16 @@ function SearchContent({color, title, props}) {
         } else {
           response = response.data.results[0].data
           setKeywordRatio(keywordRatio.splice(0,12));
-          setKeywordRatio([...keywordRatio, ...response])
-          console.log(keywordRatio)
-          setBool(true)
+          if(response.length != 12) {
+            setKeywordRatio([ {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}])  
+            setBool(true)
+            setShowbarBox(false)
+          }
+          else {
+            setKeywordRatio([...keywordRatio, ...response])
+            setBool(true)
+            setShowbarBox(true)
+          }
         }
       })
     }
@@ -158,8 +193,16 @@ function SearchContent({color, title, props}) {
       } else {
         response = response.data.results[0].data
         setKeywordRatio(keywordRatio.splice(0,12));
-        setKeywordRatio([...keywordRatio, ...response])
-        setBool(true)
+        if(response.length != 12) {
+          setKeywordRatio([ {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}, {ratio: 0}])  
+          setBool(true)
+          setShowbarBox(false)
+        }
+        else {
+          setKeywordRatio([...keywordRatio, ...response])
+          setBool(true)
+          setShowbarBox(true)
+        }
       }
     })
   }
@@ -173,7 +216,6 @@ function SearchContent({color, title, props}) {
 
   const plusAniver = () => {
     if(aniversal >= 2020) {
-      alert('2022년은 아직이에요!!')
       setAniversal(2020)
     } else {
       setAniversal(prev => prev + 1)
@@ -185,18 +227,55 @@ function SearchContent({color, title, props}) {
   const minusAniversal = () => {
     setAniversal(prev => prev - 1)
     setClicked(false)
-    
   }
 
-  
+  const moreRellKeyword = () => {
+    setMoreRelKeyword(true)
+  }
 
+  const hereBar = () => {
     return (
       <div className="searchContent">
         {
           bool ? 
           <div className="naverKeywordBox">
             <div className="naverTrendContentBox">
-              <div className="showAniversalBox">
+            <div>
+              <span className="clickMore"  style={{fontWeight:'bolder', fontSize:16, color:'black'}}>
+                관련키워드
+              </span>
+              <div className="relatedKeywordBox">
+                {
+                  <RelKeywordPage rela = {relKeyword} showMore = {moreRelKeyword}/>
+                }
+              </div>
+              <span onClick={moreRellKeyword} style={{fontWeight:'bolder', fontSize:16, color:'black'}}>
+                관련키워드 더보기
+              </span>
+            </div>
+            <div style={{padding: 10, paddingLeft: 0}}>
+                <div style={{padding: 20, paddingLeft:0}}>
+                  <div style={{display:'flex', }}>
+                    <div style={{display:'flex', flexDirection:'column', justifyContent: 'center', alignItems:'center', paddingBottom: 20, paddingTop:10, marginRight: 20}}>
+                      <h1 style={{fontWeight: 'lighter'}}>총합 검색량</h1>
+                      <span>{mobileClic + pcClick}</span>
+                    </div>
+                    <div style={{display:'flex', flexDirection:'column', justifyContent: 'center', alignItems:'center', paddingBottom: 20, paddingTop:10, marginRight: 20}}>
+                      <h3 style={{fontWeight: 'lighter'}}>PC 검색량</h3>
+                      <span>{pcClick}</span>
+                    </div>
+                    <div style={{display:'flex', flexDirection:'column', justifyContent: 'center', alignItems:'center', paddingBottom: 20, paddingTop:10, marginRight: 20}}>
+                      <h3 style={{fontWeight: 'lighter'}}>모바일 검색량</h3>
+                      <span>{mobileClic}</span>
+                    </div>
+                    <div style={{display:'flex', flexDirection:'column', justifyContent: 'center', alignItems:'center', paddingBottom: 20, paddingTop:10, marginRight: 20}}>
+                      <h3 style={{fontWeight: 'lighter'}}>상품 경쟁률</h3>
+                      <span>{compIdx}</span>
+                    </div>
+                </div>
+              </div>
+              </div>
+                <div className="showAniversalBox">
                 <div className="showAniversalBox__inBox">
                   <div>
                     <span>{aniversal}</span>
@@ -218,7 +297,7 @@ function SearchContent({color, title, props}) {
                 </div>
                 <div className="showAniversalBox__gender">
                   <div style={{ display:'flex', justifyContent: 'center', alignItems: 'center', paddingTop:10, paddingBottom: 10}}>
-                    <h3>성별</h3>
+                    <h3 style={{fontWeight:'normal'}}>성별</h3>
                   </div>
                   <div 
                     className="showAniversalBox__gender_each"
@@ -250,7 +329,7 @@ function SearchContent({color, title, props}) {
                 </div>
                 <div className="showAniversalBox__age">
                   <div style={{ display:'flex', justifyContent:'center', alignItems:'center'}}>
-                    <h3>연령</h3>
+                    <h3 style={{fontWeight:'normal'}}>연령</h3>
                   </div>
                   <ul>
                     <li>
@@ -356,10 +435,8 @@ function SearchContent({color, title, props}) {
                   </ul>
                 </div>
               </div>
-                
-              </div>
-              <Bar
-                data={{ 
+                <Bar
+                  data={{ 
                   labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
                   datasets:[
                     {
@@ -383,17 +460,78 @@ function SearchContent({color, title, props}) {
                   ] 
                 }}
                 width={100}
-                height={30}
-              />
-            </div>
-            
+                  height={30}
+                />
+              </div>
+              </div>
           :
           <div>
             <p>false</p>
           </div>
         }
-        
     </div>
+    
+    )
+  }
+
+  const noBar = () => {
+    return (
+      <div className="searchContent">
+        {
+          bool ? 
+          <div className="naverKeywordBox">
+            <div className="naverTrendContentBox">
+            <div>
+              <span className="clickMore"  style={{fontWeight:'bolder', fontSize:16, color:'black'}}>
+                관련키워드
+              </span>
+              <div className="relatedKeywordBox">
+                {
+                  <RelKeywordPage rela = {relKeyword} showMore = {moreRelKeyword}/>
+                }
+              </div>
+              <span onClick={moreRellKeyword} style={{fontWeight:'bolder', fontSize:16, color:'black'}}>
+                관련키워드 더보기
+              </span>
+            </div>
+            <div style={{padding: 10, paddingLeft: 0}}>
+                <div style={{padding: 20, paddingLeft:0}}>
+                  <div style={{display:'flex', }}>
+                    <div style={{display:'flex', flexDirection:'column', justifyContent: 'center', alignItems:'center', paddingBottom: 20, paddingTop:10, marginRight: 20}}>
+                      <h1 style={{fontWeight: 'lighter'}}>총합 검색량</h1>
+                      <span>{mobileClic + pcClick}</span>
+                    </div>
+                    <div style={{display:'flex', flexDirection:'column', justifyContent: 'center', alignItems:'center', paddingBottom: 20, paddingTop:10, marginRight: 20}}>
+                      <h3 style={{fontWeight: 'lighter'}}>PC 검색량</h3>
+                      <span>{pcClick}</span>
+                    </div>
+                    <div style={{display:'flex', flexDirection:'column', justifyContent: 'center', alignItems:'center', paddingBottom: 20, paddingTop:10, marginRight: 20}}>
+                      <h3 style={{fontWeight: 'lighter'}}>모바일 검색량</h3>
+                      <span>{mobileClic}</span>
+                    </div>
+                    <div style={{display:'flex', flexDirection:'column', justifyContent: 'center', alignItems:'center', paddingBottom: 20, paddingTop:10, marginRight: 20}}>
+                      <h3 style={{fontWeight: 'lighter'}}>상품 경쟁률</h3>
+                      <span>{compIdx}</span>
+                    </div>
+                </div>
+              </div>
+              </div>
+                <div>
+                  <h1>해당 키워드에 대한 그래프값을 제공할 수 없습니다.</h1>
+                  <p>다른 키워드나 해당 키워드를 나눠 검색해주세요</p>
+                </div>
+              </div>
+              </div>
+          :
+          <div>
+            <p>false</p>
+          </div>
+        }
+    </div>
+    )
+  }
+    return (
+      showbarBox ? hereBar() : noBar()
     )
   }
 

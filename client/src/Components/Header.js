@@ -86,7 +86,6 @@ function Header(props) {
   ]
 
 let clickedres = [];
-
   return (
     <div className="wholeBody">
       <div className="body">
@@ -97,22 +96,7 @@ let clickedres = [];
           <p className="searchWords">{props.location.state.detail}</p>
           <p style={{display:'flex', justifyContent:'flex-end', alignItems:'flex-end'}}> 에 대한 키워드분석</p>
         </div>
-        <div style={{padding: 20, paddingLeft:0}}>
-          <div style={{display:'flex', }}>
-            <div style={{display:'flex', paddingBottom: 20, paddingTop:10, marginRight: 10}}>
-              <h2>모바일 검색량</h2>
-              <span>30000</span>
-            </div>
-            <div style={{display:'flex', paddingBottom: 20, paddingTop:10, marginRight: 10}}>
-              <h2>PC 검색량</h2>
-              <span>30000</span>
-            </div>
-            <div style={{display:'flex', paddingBottom: 20, paddingTop:10}}>
-              <h2>총합 검색량</h2>
-              <span>60000</span>
-            </div>
-          </div>
-        </div>
+        
         <div>
           <SearchContent props={props} color="rgba(2,207,92, 1)" title="Naver" />
         </div>
